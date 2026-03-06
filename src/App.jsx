@@ -86,23 +86,14 @@ async function callClaude(history, role, mode, scenarioText) {
   if (mode === "thinking" && scenarioText) {
     system += `\n\nMODE: You are in Product Thinking Mode. The scenario is: "${scenarioText}". Guide the user through your structured product analysis. After they share their approach, deliver a full analysis using your real decision frameworks and referencing your actual case studies where applicable.`;
   }
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
+  const res = await fetch("/api/chat", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": import.meta.env.VITE_ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
-      system,
-      messages: history,
-    }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ messages: history, system }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error?.message || "API error");
-  return data.content[0].text;
+  if (!res.ok) throw new Error(data.error || "API error");
+  return data.text;
 }
 
 // ─── COMPONENTS ──────────────────────────────────────────────────────────────
