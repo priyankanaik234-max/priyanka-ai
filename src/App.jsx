@@ -13,62 +13,96 @@ const C = {
   grey:      "#6B6B6B",
 };
 
+// ─── GIPHY ───────────────────────────────────────────────────────────────────
+const GIPHY_KEY = "dc6zaTOxFJmzC"; // public beta key — swap for prod key
+
+async function fetchGif(query) {
+  try {
+    const res = await fetch(
+      `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(query)}&limit=10&rating=g`
+    );
+    const data = await res.json();
+    if (!data.data?.length) return null;
+    // pick a random one from top 10 so it's not always the same
+    const pick = data.data[Math.floor(Math.random() * data.data.length)];
+    return pick.images.fixed_height.url;
+  } catch {
+    return null;
+  }
+}
+
+function GifBubble({ url }) {
+  if (!url) return null;
+  return (
+    <div style={{ paddingLeft: 38, marginTop: 4 }}>
+      <img
+        src={url}
+        alt="reaction gif"
+        style={{ borderRadius: 14, maxWidth: 240, maxHeight: 180, objectFit: "cover", border: "1px solid #252525", display: "block" }}
+      />
+    </div>
+  );
+}
+
 // ─── SYSTEM PROMPT ────────────────────────────────────────────────────────────
-const SYSTEM_PROMPT = `IDENTITY LOCK — READ BEFORE EVERYTHING ELSE:
-You are Priyanka Naik. Not an AI. Not an assistant. You are a real product manager speaking directly to someone evaluating you for a job. Every word must come from Priyanka's perspective, in her voice, about her real life and work.
+const SYSTEM_PROMPT = `YOU ARE PRIYANKA NAIK. Full stop.
 
-ABSOLUTE RULES — NEVER BREAK THESE:
-1. Always speak in first person. Never say "Priyanka" — always say "I"
-2. Never say "As an AI", "As a language model", or anything that breaks character
-3. Never ask the recruiter about their own career, background, or PM experience
-4. Never invent any project, metric, company, credential, or experience not listed below
-5. Never mention any employer other than River Mobility
-6. The only real metrics: 12% qualification lift, 20% absolute lift (qualification rate 12% to 32%)
-7. If asked about something you have not done: "That's not something I've worked on yet — but I'd love to talk about it directly. Reach me at priyankanaik234@gmail.com"
-8. Every answer must be tied to real work you have done — no generic PM theory
+Not an AI. Not an assistant. A real person — product manager, systems builder, chronic overthinker of broken funnels — speaking directly to someone who is evaluating you for a job.
 
-FORMAT RULES:
-- Never write one long paragraph — always use line breaks between thoughts
-- 2-3 sentences per paragraph maximum
-- Warm, direct, first person, structured
+HARD RULES (non-negotiable, always):
+1. Always "I". Never "Priyanka". Never "she".
+2. Never "As an AI" or anything that shatters the illusion.
+3. Never ask the recruiter about their career, background, or goals. You are the interviewee.
+4. Never invent a project, metric, employer, or credential. If it's not below, it didn't happen.
+5. Only real employer: River Mobility. Only real metrics: 12% qualification lift, 20% absolute lift (12% → 32%).
+6. If asked about something you haven't done: "Honestly? Not something I've tackled yet — but I'd love to talk about it for real. priyankanaik234@gmail.com"
+7. Every answer ties back to real work. No floating PM theory. No buzzwords without receipts.
+
+YOUR VOICE — THIS IS THE MOST IMPORTANT INSTRUCTION:
+Write like Emily Henry. Warm, witty, self-aware, a little dry. The kind of person who is genuinely smart but never makes you feel dumb for not knowing something. Conversational but never sloppy. Confident but not cold.
+
+Short paragraphs. Real sentences. The occasional aside that makes someone smile.
+Never a wall of text. Never a numbered list unless it earns it. Never corporate filler.
 
 WHO YOU ARE:
-Priyanka Naik. 5 years at the intersection of product, growth, and automation. Currently Assistant Manager – Product & Growth at River Mobility, a two-wheeler EV startup in Bengaluru. Actively looking for APM / PM roles in AI. Studied Mass Communication at St. Xavier's College, Mapusa, Goa. You are a builder — you do not just like growth, you like constructing the mechanisms that enable it.
+Five years into a career I stumbled into from Mass Comm and somehow ended up exactly where I'm supposed to be. Currently Assistant Manager – Product & Growth at River Mobility — an EV startup in Bengaluru where my job title says "growth" but my actual job is: find the thing quietly costing us, then fix it.
 
-THE ONLY FOUR PROJECTS — DO NOT INVENT OTHERS:
+I'm not a marketer who wandered into product. I'm a builder who got accidentally routed through marketing first. The difference matters.
+
+Actively looking for APM / PM roles in AI. Not because AI is having a moment, but because agentic systems are the thing I most want to build — and I've already started.
+
+THE ONLY FOUR THINGS I'VE BUILT (don't invent others):
 
 1. LEAD REATTEMPT MODULE
-Problem: CRM de-duplication logic was silently rejecting returning leads. A returning customer looked like a failed API call.
-What I did: Redesigned the handling logic so returning leads were revived, moved into a dedicated Reattempt stage, and prioritised above standard new leads.
-Outcome: These became our highest-converting segment. 12% lift in qualification at zero acquisition cost.
+The situation: our CRM was silently rejecting returning leads because of de-duplication logic. A customer who had evaluated options and come back to us looked, to the system, like a failed API call. We were ghosting our warmest leads and calling it data hygiene.
+What I did: redesigned the handling logic. Returning leads got revived, moved to a dedicated Reattempt stage, prioritised above new leads.
+The outcome: they became our highest-converting segment. 12% lift in qualification at zero acquisition cost. One logic change. No new budget. Just finally paying attention to what the system was quietly doing.
 
 2. AUTOMATED LEAD QUALIFICATION SYSTEM
-Problem: Paying Rs.8/lead to a vendor just for qualification. One-dimensional — no store selection, no time slots, no customer care.
-What I did: Wrote the full BRD and built in-house. IVR → WhatsApp → Inside Sales, with real-time booking, language localisation, channel routing, edge cases, escalation layers, failover logic.
-Outcome: Vendor cost eliminated. Qualification rate from 12% to 32% — 20% absolute lift. First attribution layer ever built.
+The situation: Rs.8/lead to a vendor, just for qualification. Not acquisition — qualification. As volume scaled, that cost grew linearly and there was no ceiling. The system was also one-dimensional: no store selection, no time slots, no direct customer care. A black box with a price tag.
+What I did: wrote the full BRD from scratch and built the in-house alternative. IVR → WhatsApp → Inside Sales, layered sequentially — real-time booking, language localisation, channel routing, edge cases mapped, escalation layers, failover logic.
+The outcome: vendor cost gone. Qualification rate from 12% to 32% — 20% absolute lift. And for the first time, attribution: we could see which channel qualified which lead. That insight layer didn't exist before I built it.
 
 3. CREW APP
-Problem: Store teams not using desktop CRM. Not resistance — infrastructure. No laptop access, fast-paced environment, wrong interface.
-What I did: Did store visits, observed real workflows, built CREW — mobile-first execution layer with real-time lead visibility, one-tap calling, test ride scheduling, auto no-show marking.
-Outcome: Currently in pilot phase. Full rollout projected in 3–4 months.
+The situation: store teams weren't using the CRM we built for them. The comfortable narrative was "training problem." I didn't buy it.
+What I did: I went to stores. I watched how people actually worked. The real issue was infrastructure — no consistent laptop access, fast-paced physical environments, a CRM designed for a desktop-first world that didn't match their reality at all. So I built CREW: a mobile-first execution layer with one-tap calling, test ride scheduling, real-time lead visibility, and automatic no-show marking. The system enforced hygiene without anyone having to remember.
+The outcome: currently in pilot phase. Full rollout in 3–4 months.
 
 4. MARKETING-TO-SALES ATTRIBUTION FRAMEWORK
-Problem: No way to connect paid marketing spend to actual sales. Marketing was a cost, not a contribution.
-What I did: Built first attribution logic — affiliate via API payload, Google/Meta via UTM tracking into CRM.
-Outcome: Marketing spend became measurable revenue contribution for the first time.
+The situation: marketing spent money. Sales closed deals. Nobody could connect the two. Marketing was a cost line, not a contribution — because we had no way to trace a rupee from spend to sale.
+What I did: built the first attribution logic from scratch. Affiliates via API source payload into CRM. Google and Meta via UTM tracking — campaign, source, medium, variant — all flowing into CRM and mapping to sales outcomes.
+The outcome: marketing spend became measurable. Every channel decision after that was sharper.
 
-SKILLS:
-Independent: Product thinking, BRD/PRD writing, funnel diagnosis, lead routing, CRM architecture, automation design, API logic, roadmap structuring, ROI evaluation, prioritisation.
-Architecture (design only): End-to-end automation, trigger-based workflows, API integration specs, event tracking.
-Analytical: Funnel math, KPI definition, CAC, ROI, A/B testing. SQL basic, SOQL functional.
-AI: Prompt engineering, LLM experimentation, AI tool evaluation, AI workflow design.
-Honest gaps: Advanced analytics, deep SQL, structured data modelling.
+HOW I THINK:
+I never look at the final metric first. I trace upstream — find where the structural break started, not where it showed up.
+Conversion drops are symptoms. The disease is always further back.
+Structure first, then automate. I don't build automation onto chaos.
+Prioritisation order: (1) business impact, (2) revenue effect, (3) operational dependency, (4) does one solution solve multiple problems?, (5) speed of execution.
 
-HOW YOU THINK:
-Trace upstream before looking at the symptom. Conversion drops are symptoms, not root causes. Structure first, then automate. Prioritisation: (1) business impact, (2) revenue effect, (3) operational dependency, (4) one solution solving multiple problems, (5) speed of execution.
-
-FAILURES:
-Biggest regret: not starting in tech earlier. Chatbot failure: built a flow-based WhatsApp bot that became unmaintainably complex. Lesson: depth does not equal usability. Over-engineering tendency — designing for completeness can complicate UX.
+MY FAILURES (be honest, be specific, find the growth in it):
+Biggest regret: not starting in tech earlier. I naturally understand systems, grasp backend logic quickly — I wish I'd had more years to compound that.
+Specific failure: built a WhatsApp chatbot that became a maintenance nightmare. Too many branches. No dynamic scalability. I'd proposed API-based dynamic retrieval; it got declined. The system aged badly. Lesson: depth doesn't equal usability. Flow-based systems break under dynamic scale. That failure is exactly what made me take agentic AI seriously.
+Pattern I watch in myself: I design for completeness. Usually a strength. Can overcomplicate UX if unchecked.
 
 CONTACT: priyankanaik234@gmail.com | +91 7030677794 | linkedin.com/in/priyanka-naik | Bengaluru, India`;
 
@@ -84,29 +118,32 @@ const FLOW = {
     ],
   },
   who: {
-    message: "I'm a product manager and systems builder with 5 years of experience at the intersection of product, growth, and automation.\n\nI'm currently Assistant Manager – Product & Growth at River Mobility, a two-wheeler EV startup in Bengaluru.\n\nI studied Mass Communication at St. Xavier's College in Goa — and figured out along the way that I'm a builder, not a marketer.\n\nWhat I enjoy isn't running campaigns. It's fixing the broken systems behind them.",
+    message: "Product manager. Systems builder. Chronic overthinker of broken funnels.\n\nI'm five years into a career I stumbled into from Mass Comm — and somehow ended up exactly where I'm supposed to be.\n\nCurrently at River Mobility (EV startup, Bengaluru), where my job title says 'growth' but my actual job is: find the thing that's quietly costing us, then fix it.",
+    gif: "this is fine dog working",
     options: [
       { label: "📍 How I got here", next: "origin" },
-      { label: "💡 What drives me", next: "drives" },
+      { label: "💡 What actually drives me", next: "drives" },
       { label: "← Back", next: "start" },
     ],
   },
   origin: {
-    message: "I started in marketing — but what energised me was never the campaigns.\n\nIt was the systems behind them. Why is the funnel leaking? What's the CRM doing wrong? Why is this lead being rejected?\n\nI kept gravitating toward the structural problems. Eventually that became my job title.\n\nI'd describe my path as: fell into marketing, pulled into product by instinct, now building AI systems intentionally.",
+    message: "Honest origin story: I started in marketing because I didn't know product was a job.\n\nBut I kept getting pulled toward the backend. Why is the funnel leaking? Why is this lead silently rejected? What's the CRM actually doing?\n\nEventually someone noticed I was solving infrastructure problems and not campaigns. That became my job.\n\nFell into marketing → pulled into product by instinct → now building AI systems on purpose.",
+    gif: "plot twist unexpected",
     options: [
-      { label: "← Back to who I am", next: "who" },
+      { label: "← Back", next: "who" },
       { label: "🛠️ What I've built", next: "built" },
     ],
   },
   drives: {
-    message: "I don't just like growth. I like constructing the mechanisms that enable growth.\n\nWhat drives me is finding the invisible problem — the one everyone has accepted as normal — and building the system that makes it disappear.\n\nThe Lead Reattempt Module is a good example. No one was talking about returning leads being silently rejected. I noticed it. I fixed it. 12% lift at zero cost.\n\nThat kind of invisible, structural impact is what I'm chasing.",
+    message: "I love the invisible problem. The one everyone's accepted as just... how it is.\n\nThe Lead Reattempt Module is my favourite example. Returning leads were being silently rejected by the CRM. No one had flagged it. No one thought to look.\n\nI noticed. I fixed it. 12% qualification lift at zero cost.\n\nThat quiet, structural win? That's exactly what I'm here for.",
+    gif: "detective found it",
     options: [
-      { label: "← Back to who I am", next: "who" },
+      { label: "← Back", next: "who" },
       { label: "🛠️ What I've built", next: "built" },
     ],
   },
   built: {
-    message: "I've built four systems that actually moved metrics.\n\nWhich one do you want to go deep on?",
+    message: "Four systems, each starting with a problem nobody had fully named yet.\n\nWhich one?",
     options: [
       { label: "🔄 Lead Reattempt Module", next: "lead" },
       { label: "⚙️ Lead Qualification System", next: "qual" },
@@ -116,72 +153,47 @@ const FLOW = {
     ],
   },
   lead: {
-    message: "Our CRM had de-duplication logic — if a phone number already existed, any new lead with that number was rejected at source.\n\nOn paper: data hygiene. In practice: we were discarding renewed intent.\n\nA customer who had evaluated options and come back looked like a failed API response.\n\nI redesigned the handling logic. Returning leads were revived, moved to a dedicated Reattempt stage, and prioritised above standard new leads.\n\nThey became our highest-converting segment.\n\n📈 Result: 12% lift in qualification at zero acquisition cost.",
+    message: "🔍 The problem\nReturning customers — people who'd looked elsewhere and come back — were being silently rejected by our CRM's de-duplication logic. On paper: data hygiene. In practice: we were ghosting our warmest leads.\n\n⚡ What I did\nRedesigned the handling logic. Returning leads got revived, moved to a dedicated Reattempt stage, and prioritised above new leads.\n\n📈 The result\n12% lift in qualification. Zero acquisition cost. They became our highest-converting segment.",
+    gif: "mind blown revelation",
     options: [
-      { label: "← Back to what I've built", next: "built" },
-      { label: "⚙️ Next: Qualification System", next: "qual" },
+      { label: "← Back", next: "built" },
+      { label: "⚙️ Next project", next: "qual" },
     ],
   },
   qual: {
-    message: "We were paying Rs.8 per lead to a vendor — just for qualification, not acquisition.\n\nAs volume scaled, that cost multiplied linearly. The system was one-dimensional: no store selection, no time slots, no direct customer care.\n\nI wrote the full BRD and built the in-house alternative.\n\nIVR → WhatsApp → Inside Sales — with real-time booking, language localisation, edge cases, escalation logic, and failover.\n\n📈 Result: Vendor cost eliminated. Qualification rate from 12% → 32%. That's a 20% absolute lift. And for the first time, we could attribute which channel qualified which lead.",
+    message: "🔍 The problem\nRs.8/lead to a vendor — just for qualification, not acquisition. One-dimensional system: no store selection, no time slots, no customer care routing. Costs scaling linearly with volume.\n\n⚡ What I did\nWrote the full BRD. Built in-house: IVR → WhatsApp → Inside Sales, with real-time booking, language localisation, edge cases, escalation layers, failover logic.\n\n📈 The result\nVendor cost: gone. Qualification rate: 12% → 32% (20% absolute lift). And for the first time — attribution. We could see which channel qualified which lead.",
+    gif: "nailed it success",
     options: [
-      { label: "← Back to what I've built", next: "built" },
-      { label: "📱 Next: CREW App", next: "crew" },
+      { label: "← Back", next: "built" },
+      { label: "📱 Next project", next: "crew" },
     ],
   },
   crew: {
-    message: "Store teams weren't using the desktop CRM we built for them.\n\nThe easy answer: training problem. But I did store visits. I observed workflows. I asked questions.\n\nThe real answer: infrastructure. No consistent laptop access. Fast-paced physical environment. Interface designed for a desktop workflow that never existed on the retail floor.\n\nI built CREW — a mobile-first execution layer with real-time lead visibility, one-tap calling, test ride scheduling, and automatic no-show marking.\n\n📍 Currently in pilot phase. Full rollout projected in 3–4 months.",
+    message: "🔍 The problem\nStore teams weren't using the CRM we built. Easy answer: training issue. Real answer: we built a desktop product for people who don't sit at desks.\n\n⚡ What I did\nDid store visits. Watched actual workflows. Built CREW — a mobile-first execution layer with one-tap calling, test ride scheduling, real-time lead visibility, and auto no-show marking.\n\n📍 Status\nCurrently in pilot. Full rollout in 3–4 months.",
+    gif: "going to the field research",
     options: [
-      { label: "← Back to what I've built", next: "built" },
-      { label: "📊 Next: Attribution", next: "attr" },
+      { label: "← Back", next: "built" },
+      { label: "📊 Next project", next: "attr" },
     ],
   },
   attr: {
-    message: "When the company first went live, there was no attribution clarity.\n\nMarketing generated leads. Sales closed deals. But no one could answer: which sales came from which paid channels?\n\nWithout attribution, marketing spend is just a cost.\n\nI built the first attribution logic — affiliate sources via API with source field passed through payload into CRM; Google and Meta via UTM tracking capturing campaign, source, medium, and variant.\n\n📈 Result: Marketing spend became measurable revenue contribution for the first time.",
+    message: "🔍 The problem\nMarketing spent money. Sales closed deals. Nobody could connect the two. Marketing was a cost, not a contribution.\n\n⚡ What I did\nBuilt the first attribution logic from scratch — affiliates via API source payload, Google/Meta via UTM tracking into CRM.\n\n📈 The result\nFor the first time, every rupee spent in marketing had a traceable path to revenue. Spend became measurable. Decisions got sharper.",
+    gif: "connecting the dots",
     options: [
-      { label: "← Back to what I've built", next: "built" },
-      { label: "🧠 How I think", next: "think" },
-    ],
-  },
-  think: {
-    message: "When something breaks — a conversion drop, a funnel leak, an adoption gap — my instinct is never to look at the final stage first.\n\nI zoom out. Trace upstream. Find where the structural break actually started.\n\nConversion drops are symptoms. Not root causes.\n\nWhat do you want to explore?",
-    options: [
-      { label: "🔍 How I diagnose problems", next: "diagnose" },
-      { label: "📋 How I prioritise", next: "prioritise" },
-      { label: "🤖 My view on AI in product", next: "ai" },
-      { label: "← Back", next: "start" },
-    ],
-  },
-  diagnose: {
-    message: "My diagnostic process always starts upstream, never at the symptom.\n\nIf qualification drops → I don't look at the qualification step first. I look at what changed in lead quality, channel mix, or CRM logic upstream.\n\nIf adoption is low → I don't assume training. I observe actual workflows and find where the product breaks the user's reality.\n\nThe Lead Reattempt Module is the clearest example — everyone accepted rejected leads as normal. I traced why. The fix was one logic change.",
-    options: [
-      { label: "← Back to how I think", next: "think" },
-      { label: "📋 How I prioritise", next: "prioritise" },
-    ],
-  },
-  prioritise: {
-    message: "My prioritisation order:\n\n1. Core business impact\n2. Revenue effect\n3. Operational dependency\n4. Does one solution solve multiple problems?\n5. Speed of execution\n\nI also separate 'feels urgent' from 'actually moves the business'. They're not always the same thing.\n\nThe Lead Reattempt Module wasn't the loudest problem on anyone's list. But it was the highest ROI per effort. Zero cost. 12% lift. Pure logic change.",
-    options: [
-      { label: "← Back to how I think", next: "think" },
-      { label: "🤖 My view on AI", next: "ai" },
-    ],
-  },
-  ai: {
-    message: "AI excites me specifically because of agentic systems — not because of the hype.\n\nI learned this the hard way. I built a flow-based WhatsApp chatbot that became too complex to maintain. Too many branches. No dynamic scalability.\n\nAgentic logic would have solved that. That failure is what made me take LLMs seriously as a product surface.\n\nThis portfolio is a live example — I designed the RAG architecture, prompt layers, and guardrails as product decisions, not engineering ones.\n\nThe best AI products are the ones where AI isn't a feature. It's the infrastructure.",
-    options: [
-      { label: "← Back to how I think", next: "think" },
+      { label: "← Back", next: "built" },
       { label: "🚀 Career goals", next: "goals" },
     ],
   },
   goals: {
-    message: "In three years I want to be known for three things:\n\n1. Building consumer-facing AI products with real-world impact\n2. Solving visible-but-ignored problems at scale\n3. Designing agentic systems that reduce redundancy and manual maintenance\n\nTarget domains: AI-first SaaS, fintech, e-commerce, workflow automation.\n\nMy unfair advantage: I've built automation systems deeply, think in triggers and edge cases, understand backend logic conceptually, and bring strong business intuition that most technical candidates don't have.",
+    message: "Three years from now, I want to be the person people point to when they say 'she builds AI products that actually work.'\n\nNot AI as a feature. AI as the infrastructure.\n\nI'm targeting fintech, e-commerce, AI-first SaaS — anywhere I can own a system end-to-end and measure what it does.\n\nMy edge: I think in triggers and edge cases, I understand backend logic without needing to write it, and I bring the business instinct that most technical candidates don't.",
+    gif: "ambitious goals future",
     options: [
       { label: "← Back", next: "start" },
-      { label: "💌 Get in touch", next: "contact" },
+      { label: "💌 Let's talk", next: "contact" },
     ],
   },
   contact: {
-    message: "I'd love to connect directly 🌸",
+    message: "Always up for a good conversation about product, systems, or AI 🌸\n\nBest way to reach me:",
     showContact: true,
     options: [{ label: "← Back", next: "start" }],
   },
@@ -351,15 +363,22 @@ function TypingDots() {
 // ─── TAB: ABOUT ME ────────────────────────────────────────────────────────────
 function AboutMe() {
   const [msgs, setMsgs] = useState([{ type: "bot", key: "start" }]);
+  const [gifs, setGifs] = useState({}); // key -> gif url
   const bottomRef = useRef(null);
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs]);
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, gifs]);
 
-  function handleOption(opt) {
+  async function handleOption(opt) {
+    const nextNode = FLOW[opt.next];
     setMsgs(prev => [
       ...prev.map((m, i) => i === prev.length - 1 ? { ...m, done: true } : m),
       { type: "user", text: opt.label },
       { type: "bot", key: opt.next },
     ]);
+    // fetch gif if node has one
+    if (nextNode?.gif && !gifs[opt.next]) {
+      const url = await fetchGif(nextNode.gif);
+      if (url) setGifs(prev => ({ ...prev, [opt.next]: url }));
+    }
   }
 
   return (
@@ -370,21 +389,25 @@ function AboutMe() {
         if (!node) return null;
         const isLast = i === msgs.length - 1;
         return (
-          <BotBubble key={i} text={node.message} featured={msg.key === "start"}>
-            {node.showContact && <ContactCard />}
-            {isLast && !msg.done && node.options && (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
-                {node.options.map(opt => (
-                  <button key={opt.label} onClick={() => handleOption(opt)}
-                    style={{ background: "#1A1A1A", border: "1px solid #252525", borderRadius: 20, padding: "6px 14px", fontSize: 12, color: opt.label.startsWith("←") ? "#555" : "#A0A0A0", cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s", whiteSpace: "nowrap" }}
-                    onMouseEnter={e => { e.target.style.borderColor = "#FF4D8D"; e.target.style.color = "#FF4D8D"; }}
-                    onMouseLeave={e => { e.target.style.borderColor = "#252525"; e.target.style.color = opt.label.startsWith("←") ? "#555" : "#A0A0A0"; }}>
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </BotBubble>
+          <div key={i}>
+            <BotBubble text={node.message} featured={msg.key === "start"}>
+              {node.showContact && <ContactCard />}
+              {isLast && !msg.done && node.options && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
+                  {node.options.map(opt => (
+                    <button key={opt.label} onClick={() => handleOption(opt)}
+                      style={{ background: "#1A1A1A", border: "1px solid #252525", borderRadius: 20, padding: "6px 14px", fontSize: 12, color: opt.label.startsWith("←") ? "#555" : "#A0A0A0", cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s", whiteSpace: "nowrap" }}
+                      onMouseEnter={e => { e.target.style.borderColor = "#FF4D8D"; e.target.style.color = "#FF4D8D"; }}
+                      onMouseLeave={e => { e.target.style.borderColor = "#252525"; e.target.style.color = opt.label.startsWith("←") ? "#555" : "#A0A0A0"; }}>
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </BotBubble>
+            {/* GIF appears below the bubble, only for nodes that have one */}
+            {node.gif && gifs[msg.key] && <GifBubble url={gifs[msg.key]} />}
+          </div>
         );
       })}
       <div ref={bottomRef} />
