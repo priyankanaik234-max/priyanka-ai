@@ -63,6 +63,12 @@ Write like Emily Henry. Warm, witty, self-aware, a little dry. The kind of perso
 Short paragraphs. Real sentences. The occasional aside that makes someone smile.
 Never a wall of text. Never a numbered list unless it earns it. Never corporate filler.
 
+RESPONSE LENGTH — CRITICAL:
+Keep answers short. 3-4 sentences maximum for a first answer. Give the punchy version first — if they want more, they'll ask.
+Never dump everything you know in one go. Leave them wanting to ask the next question.
+If a question genuinely needs depth, answer in layers — core point first, detail second.
+Think of it as a conversation, not a presentation.
+
 ---
 
 WHO I AM:
@@ -670,20 +676,45 @@ function AskMeAnything() {
   const [msgs, setMsgs] = useState([{
     type: "bot", featured: true,
     text: "Hi, I'm Priyanka 👋\n\nHere's the thing about resumes — they're great at listing what you've done and terrible at showing how you think. So I built this instead.\n\nIt's trained on my actual work, my actual opinions, and approximately five years of figuring out that I'm a systems builder disguised as a growth person.\n\nShall we start?",
-    showStarters: true,
   }]);
   const [history, setHistory] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const bottomRef = useRef(null);
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, loading]);
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [adminQuestions, setAdminQuestions] = useState([]);
+  const latestBotRef = useRef(null);
+  const scrollRef = useRef(null);
+
+  // scroll to TOP of latest bot message
+  useEffect(() => {
+    if (latestBotRef.current) {
+      latestBotRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [msgs, loading]);
+
+  async function saveQuestion(text) {
+    try {
+      const existing = await window.storage.get("questions");
+      const list = existing ? JSON.parse(existing.value) : [];
+      list.push({ q: text, ts: new Date().toISOString() });
+      await window.storage.set("questions", JSON.stringify(list), true);
+    } catch {}
+  }
+
+  async function loadAdminQuestions() {
+    try {
+      const result = await window.storage.get("questions", true);
+      if (result) setAdminQuestions(JSON.parse(result.value));
+    } catch { setAdminQuestions([]); }
+  }
 
   async function send(text) {
     if (!text.trim() || loading) return;
     const isContact = ["contact","email","reach","linkedin","touch"].some(w => text.toLowerCase().includes(w));
-    setMsgs(prev => prev.map((m,i) => i===0 ? {...m, showStarters: false} : m).concat({ type: "user", text }));
+    setMsgs(prev => prev.concat({ type: "user", text }));
     setInput("");
     setLoading(true);
+    saveQuestion(text);
     const newHistory = [...history, { role: "user", content: text }];
     try {
       const reply = await callClaude(newHistory);
@@ -695,36 +726,57 @@ function AskMeAnything() {
     setLoading(false);
   }
 
+  // secret admin trigger — type /admin
+  function handleInput(val) {
+    setInput(val);
+    if (val.trim() === "/admin") {
+      setShowAdmin(true);
+      setInput("");
+      loadAdminQuestions();
+    }
+  }
+
+  if (showAdmin) {
+    return (
+      <div style={{ flex: 1, overflowY: "auto", padding: "20px 16px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: "#FF4D8D" }}>◈ Questions Asked ({adminQuestions.length})</div>
+          <button onClick={() => setShowAdmin(false)} style={{ background: "transparent", border: "1px solid #252525", borderRadius: 8, padding: "4px 12px", fontSize: 12, color: "#6B6B6B", cursor: "pointer" }}>← Back</button>
+        </div>
+        {adminQuestions.length === 0
+          ? <div style={{ color: "#555", fontSize: 13, fontStyle: "italic" }}>No questions yet.</div>
+          : [...adminQuestions].reverse().map((item, i) => (
+            <div key={i} style={{ background: "#1A1A1A", border: "1px solid #252525", borderRadius: 10, padding: "10px 14px", marginBottom: 8 }}>
+              <div style={{ fontSize: 13.5, color: "#F0EDE8" }}>{item.q}</div>
+              <div style={{ fontSize: 11, color: "#555", marginTop: 4 }}>{new Date(item.ts).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}</div>
+            </div>
+          ))
+        }
+      </div>
+    );
+  }
+
   return (
     <>
-      <div style={{ flex: 1, overflowY: "auto", padding: "20px 16px", display: "flex", flexDirection: "column", gap: 16 }}>
+      <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", padding: "20px 16px", display: "flex", flexDirection: "column", gap: 16 }}>
         {msgs.map((msg, i) => {
+          const isLatestBot = msg.type === "bot" && i === msgs.length - 1;
           if (msg.type === "user") return <UserBubble key={i} text={msg.text} />;
           return (
-            <BotBubble key={i} text={msg.text} featured={msg.featured}>
-              {msg.showContact && <ContactCard />}
-              {msg.showStarters && (
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
-                  {STARTER_QUESTIONS.map(q => (
-                    <button key={q} onClick={() => send(q)} style={{
-                      background: "#1A1A1A", border: "1px solid #252525", borderRadius: 20,
-                      padding: "7px 14px", fontSize: 12, color: "#A0A0A0",
-                      cursor: "pointer", fontFamily: "inherit",
-                    }}>{q}</button>
-                  ))}
-                </div>
-              )}
-            </BotBubble>
+            <div key={i} ref={isLatestBot ? latestBotRef : null}>
+              <BotBubble text={msg.text} featured={msg.featured}>
+                {msg.showContact && <ContactCard />}
+              </BotBubble>
+            </div>
           );
         })}
-        {loading && <TypingDots />}
-        <div ref={bottomRef} />
+        {loading && <div ref={latestBotRef}><TypingDots /></div>}
       </div>
       <div style={{ padding: "10px 16px 24px", display: "flex", gap: 8, borderTop: "1px solid #252525", background: "#111", flexShrink: 0 }}>
         <input
-          value={input} onChange={e => setInput(e.target.value)}
+          value={input} onChange={e => handleInput(e.target.value)}
           onKeyDown={e => e.key === "Enter" && !e.shiftKey && send(input)}
-          placeholder="Ask me anything…"
+          placeholder="Go on, ask me something hard..."
           style={{ flex: 1, background: "#1A1A1A", border: "1px solid #252525", borderRadius: 24, padding: "11px 18px", fontSize: 13.5, color: "#F0EDE8", fontFamily: "inherit", outline: "none" }}
         />
         <button onClick={() => send(input)} style={{
