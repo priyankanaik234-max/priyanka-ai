@@ -257,7 +257,7 @@ CONTACT: priyankanaik234@gmail.com | +91 7030677794 | linkedin.com/in/priyankana
 // ─── ABOUT ME FLOW ────────────────────────────────────────────────────────────
 const FLOW = {
   start: {
-    message: "Welcome to the rabbit hole. 🐇\n\nThis is my CV — but make it a choose-your-own-adventure. It's flow-based, not a chatbot. You pick what you want to know, I take you deeper.\n\nSomewhere along the way you'll know more about my career than you planned to.\n\nWhere do you want to start?",
+    message: "This is my CV, botified.\n\nThere's so much pressure to keep your resume a one-pager — but I'm an oversharer, so I built this bot instead. It'll take you through my entire professional journey in less time than your two-minute Maggi takes to cook.\n\nYou pick what you want to know. I take you deeper.\n\nWhere do you want to start?",
     ps: "Quick note — this bot isn't making things up. Every answer is grounded in a knowledge base I built from scratch: real projects, real numbers, real opinions. If I haven't done something, it'll tell you that. If I have, it'll tell you exactly how.",
     options: [
       { label: "🙋 Who I am", next: "who" },
