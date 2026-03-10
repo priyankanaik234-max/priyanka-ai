@@ -101,6 +101,33 @@ Actively looking for APM / PM roles in AI.
 
 ---
 
+PRE-RIVER: 2 YEARS IN AGENCY LIFE (2021–2023)
+
+Growth Gravy — Digital Marketing Agency, Goa
+Digital Marketing Executive | Aug 2021 – Aug 2022
+
+My first real job. Started as a paid ads intern, got converted to full-time before the internship ended — which, in agency world, means they liked what they saw.
+
+Managed 15+ client campaigns end-to-end across real estate, hospitality, and consumer brands. Meta ads, organic social, emailers — concept to execution, all of it. In an agency in Goa, you don't specialise. You do everything, fast, for everyone, every day.
+
+The thing I'm proudest of from this role: I introduced Scrum sprints and retrospectives to the team. Nobody asked me to. I just noticed we were chaotic and thought — there's a better way to run this. Centralised reporting too. The instinct to fix the process, not just do the work — that started here.
+
+Drool Monkey — Digital Agency, Goa
+Performance Marketing Executive | Sep 2022 – Apr 2023
+
+Moved agencies for more scope. Got ed-tech and e-commerce clients, WhatsApp marketing experience, and a deeper push into performance work.
+
+Boosted campaign performance by 25% through structured relaunches and automation-led reporting. Built automated dashboards that cut turnaround time by 40% and actually improved data accuracy. Standardised QA workflows so delivery was consistent regardless of who was working on what.
+
+The automation instinct showed up here first. Before I was building CRM systems at River, I was building dashboards that ran themselves at Drool Monkey.
+
+What those 2 years actually taught me:
+Agency life is a 9-to-forever job. It doesn't stop. You're doing the whole gamut alone, in a day, every day. What it built in me: time management that's almost involuntary now, prioritisation that's fast and instinctive, and an execution speed that startup life later confirmed was unusual.
+
+I left Goa for Bengaluru because I wanted bigger problems. Agency life in Goa had a ceiling I could see. River didn't have a ceiling — it barely had a floor. That was exactly what I needed.
+
+---
+
 THE FOUR THINGS I'VE BUILT (don't invent others):
 
 1. LEAD REATTEMPT MODULE
@@ -315,7 +342,7 @@ const FLOW = {
     ],
   },
   who: {
-    message: "Product manager. Systems builder. Chronic overthinker of broken funnels.\n\nI'm five years into a career I stumbled into from Mass Comm — and somehow ended up exactly where I'm supposed to be.\n\nCurrently at River Mobility (EV startup, Bengaluru), where my job title says 'growth' but my actual job is: find the thing that's quietly costing us, then fix it.",
+    message: "I'm a product manager who started in marketing because I had a plan.\n\nThe plan wasn't wrong — I loved marketing, actually. The strategy, the funnel thinking, the 'why does this work on people' part. But somewhere along the way I realised I was always more excited by what was behind the campaign than the campaign itself.\n\nFive years at River Mobility, an EV startup in Bengaluru. My job title says growth. My actual job is: find the thing quietly breaking, then fix it before anyone notices it was broken.",
     gif: "this is fine dog working",
     options: [
       { label: "📍 How I got here", next: "origin" },
@@ -324,7 +351,7 @@ const FLOW = {
     ],
   },
   origin: {
-    message: "Honest origin story: I started in marketing because I didn't know product was a job.\n\nBut I kept getting pulled toward the backend. Why is the funnel leaking? Why is this lead silently rejected? What's the CRM actually doing?\n\nEventually someone noticed I was solving infrastructure problems and not campaigns. That became my job.\n\nFell into marketing → pulled into product by instinct → now building AI systems on purpose.",
+    message: "I chose marketing on purpose. Loved it, actually.\n\nStarted in Goa at a digital agency — managing 15+ client campaigns, doing the whole gamut alone every day. Meta ads, organic social, emailers. Agency life doesn't let you specialise. It just lets you get fast.\n\nThen at River, everything was broken. CRM rejecting customers. Vendors charging for logic we could build ourselves. Store teams ignoring systems we'd built for them. Every day was a new problem with no owner.\n\nSo I became the owner. Didn't plan to. Just couldn't not.\n\nMarketing wasn't the wrong plan. It just led me somewhere better.",
     gif: "plot twist unexpected",
     options: [
       { label: "← Back", next: "who" },
@@ -332,7 +359,7 @@ const FLOW = {
     ],
   },
   drives: {
-    message: "I love the invisible problem. The one everyone's accepted as just... how it is.\n\nThe Lead Reattempt Module is my favourite example. Returning leads were being silently rejected by the CRM. No one had flagged it. No one thought to look.\n\nI noticed. I fixed it. 12% qualification lift at zero cost.\n\nThat quiet, structural win? That's exactly what I'm here for.",
+    message: "I'm obsessed with the problem nobody's named yet.\n\nThe one everyone's quietly worked around for so long it's become invisible. The 'that's just how it is' thing. That's where I live.\n\nI once found our CRM was silently rejecting returning customers — people who'd gone elsewhere, thought about it, and come back to us. The system called it data hygiene. I called it ghosting our warmest leads.\n\nFixed it. 12% qualification lift. Zero extra spend.\n\nThat feeling never gets old.",
     gif: "detective found it",
     options: [
       { label: "← Back", next: "who" },
@@ -340,7 +367,7 @@ const FLOW = {
     ],
   },
   built: {
-    message: "Four systems, each starting with a problem nobody had fully named yet.\n\nWhich one?",
+    message: "Four systems. Each one started with a problem nobody had fully named yet.\n\nWhich one?",
     options: [
       { label: "🔄 Lead Reattempt Module", next: "lead" },
       { label: "⚙️ Lead Qualification System", next: "qual" },
@@ -350,7 +377,7 @@ const FLOW = {
     ],
   },
   lead: {
-    message: "🔍 The problem\nReturning customers — people who'd looked elsewhere and come back — were being silently rejected by our CRM's de-duplication logic. On paper: data hygiene. In practice: we were ghosting our warmest leads.\n\n⚡ What I did\nRedesigned the handling logic. Returning leads got revived, moved to a dedicated Reattempt stage, and prioritised above new leads.\n\n📈 The result\n12% lift in qualification. Zero acquisition cost. They became our highest-converting segment.",
+    message: "Our CRM had a de-duplication rule. Sensible on paper — no duplicate phone numbers.\n\nWhat it was actually doing: treating returning customers like spam. Someone who'd looked at our bikes, gone away, come back — rejected at source. We were ghosting our warmest leads and calling it data hygiene.\n\nI redesigned the logic. Revived dormant leads, routed them to the best agents.\n\n12% qualification lift. Zero acquisition cost. They became our highest-converting segment.\n\nSomeone told me later it was an industry first. I just thought it was obvious.",
     gif: "mind blown revelation",
     options: [
       { label: "← Back", next: "built" },
@@ -358,7 +385,7 @@ const FLOW = {
     ],
   },
   qual: {
-    message: "🔍 The problem\nRs.8/lead to a vendor — just for qualification, not acquisition. One-dimensional system: no store selection, no time slots, no customer care routing. Costs scaling linearly with volume.\n\n⚡ What I did\nWrote the full BRD. Built in-house: IVR → WhatsApp → Inside Sales, with real-time booking, language localisation, edge cases, escalation layers, failover logic.\n\n📈 The result\nVendor cost: gone. Qualification rate: 12% → 32% (20% absolute lift). And for the first time — attribution. We could see which channel qualified which lead.",
+    message: "We were paying ₹8 per lead — just for qualification. Not acquisition. Qualification.\n\nAnd the system we were paying for was embarrassingly basic. No store selection. No time slots. No customer care. Just a linear flow that processed leads like they were parcels.\n\nI wrote the BRD, built it in-house. IVR → WhatsApp → Inside Sales. Real-time booking, language localisation, edge cases, escalation logic, failover — the works.\n\nQualification rate: 12% → 32%. Vendor cost: gone. And as a side effect — attribution. For the first time, we knew which channel was actually working.",
     gif: "nailed it success",
     options: [
       { label: "← Back", next: "built" },
@@ -366,7 +393,7 @@ const FLOW = {
     ],
   },
   crew: {
-    message: "🔍 The problem\nStore teams weren't using the CRM we built. Easy answer: training issue. Real answer: we built a desktop product for people who don't sit at desks.\n\n⚡ What I did\nDid store visits. Watched actual workflows. Built CREW — a mobile-first execution layer with one-tap calling, test ride scheduling, real-time lead visibility, and auto no-show marking.\n\n📍 Status\nCurrently in pilot. Full rollout in 3–4 months.",
+    message: "Store teams weren't using our CRM. Easy narrative: training problem.\n\nI went to the stores. Watched how people actually worked. One laptop per store. Fast-paced physical environment. Nobody sitting down. The CRM was built for a desk that didn't exist.\n\nSo I built CREW — mobile-first, one-tap everything, auto no-show marking. Designed for the job they were actually doing, not the job we assumed they were doing.\n\nIn pilot now. The feedback's been good. Sometimes the obvious fix is just: watch people first.",
     gif: "going to the field research",
     options: [
       { label: "← Back", next: "built" },
@@ -374,7 +401,7 @@ const FLOW = {
     ],
   },
   attr: {
-    message: "🔍 The problem\nMarketing spent money. Sales closed deals. Nobody could connect the two. Marketing was a cost, not a contribution.\n\n⚡ What I did\nBuilt the first attribution logic from scratch — affiliates via API source payload, Google/Meta via UTM tracking into CRM.\n\n📈 The result\nFor the first time, every rupee spent in marketing had a traceable path to revenue. Spend became measurable. Decisions got sharper.",
+    message: "Before I built this, nobody could answer a simple question: which marketing spend actually drove sales?\n\nMarketing spent money. Sales closed deals. The connection between them was vibes and guesswork.\n\nI built the attribution logic from scratch — API payloads for affiliates, UTM tracking for Google and Meta, all flowing into CRM and mapping to sales outcomes.\n\nFor the first time, a rupee spent had a traceable path to a rupee earned. Obvious thing to build. Nobody had built it yet.",
     gif: "connecting the dots",
     options: [
       { label: "← Back", next: "built" },
@@ -382,7 +409,7 @@ const FLOW = {
     ],
   },
   goals: {
-    message: "Three years from now, I want to be the person people point to when they say 'she builds AI products that actually work.'\n\nNot AI as a feature. AI as the infrastructure.\n\nI'm targeting fintech, e-commerce, AI-first SaaS — anywhere I can own a system end-to-end and measure what it does.\n\nMy edge: I think in triggers and edge cases, I understand backend logic without needing to write it, and I bring the business instinct that most technical candidates don't.",
+    message: "Three years from now I want to be the person people point to when they say she builds AI products that actually work.\n\nNot AI as a feature someone bolted on. AI as the architecture. The thing the product couldn't exist without.\n\nI'm looking for fintech, e-commerce, AI-first SaaS — anywhere the data is rich, the problems are real, and I can own something end to end.\n\nMy edge: I think in triggers and edge cases, I understand backend logic without needing to write it, and I bring the business instinct that most technical candidates don't.",
     gif: "ambitious goals future",
     options: [
       { label: "← Back", next: "start" },
