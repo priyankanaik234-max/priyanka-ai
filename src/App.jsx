@@ -377,6 +377,7 @@ const FLOW = {
     ],
   },
   lead: {
+    deepDive: "Tell me more about the Lead Reattempt Module — how did you figure out the problem and what exactly did you build?",
     message: "Our CRM had a de-duplication rule. Sensible on paper — no duplicate phone numbers.\n\nWhat it was actually doing: treating returning customers like spam. Someone who'd looked at our bikes, gone away, come back — rejected at source. We were ghosting our warmest leads and calling it data hygiene.\n\nI redesigned the logic. Revived dormant leads, routed them to the best agents.\n\n12% qualification lift. Zero acquisition cost. They became our highest-converting segment.\n\nSomeone told me later it was an industry first. I just thought it was obvious.",
     gif: "mind blown revelation",
     options: [
@@ -385,6 +386,7 @@ const FLOW = {
     ],
   },
   qual: {
+    deepDive: "Tell me more about the Lead Qualification System — how did you decide to build it in-house and what were the hardest parts?",
     message: "We were paying ₹8 per lead — just for qualification. Not acquisition. Qualification.\n\nAnd the system we were paying for was embarrassingly basic. No store selection. No time slots. No customer care. Just a linear flow that processed leads like they were parcels.\n\nI wrote the BRD, built it in-house. IVR → WhatsApp → Inside Sales. Real-time booking, language localisation, edge cases, escalation logic, failover — the works.\n\nQualification rate: 12% → 32%. Vendor cost: gone. And as a side effect — attribution. For the first time, we knew which channel was actually working.",
     gif: "nailed it success",
     options: [
@@ -393,6 +395,7 @@ const FLOW = {
     ],
   },
   crew: {
+    deepDive: "Tell me more about the CREW App — what did you discover from the store visits and how did that shape what you built?",
     message: "Store teams weren't using our CRM. Easy narrative: training problem.\n\nI went to the stores. Watched how people actually worked. One laptop per store. Fast-paced physical environment. Nobody sitting down. The CRM was built for a desk that didn't exist.\n\nSo I built CREW — mobile-first, one-tap everything, auto no-show marking. Designed for the job they were actually doing, not the job we assumed they were doing.\n\nIn pilot now. The feedback's been good. Sometimes the obvious fix is just: watch people first.",
     gif: "going to the field research",
     options: [
@@ -401,6 +404,7 @@ const FLOW = {
     ],
   },
   attr: {
+    deepDive: "Tell me more about the Attribution Framework — what did building it from scratch actually involve and what changed after it went live?",
     message: "Before I built this, nobody could answer a simple question: which marketing spend actually drove sales?\n\nMarketing spent money. Sales closed deals. The connection between them was vibes and guesswork.\n\nI built the attribution logic from scratch — API payloads for affiliates, UTM tracking for Google and Meta, all flowing into CRM and mapping to sales outcomes.\n\nFor the first time, a rupee spent had a traceable path to a rupee earned. Obvious thing to build. Nobody had built it yet.",
     gif: "connecting the dots",
     options: [
@@ -609,7 +613,7 @@ function TypingDots() {
 }
 
 // ─── TAB: ABOUT ME ────────────────────────────────────────────────────────────
-function AboutMe() {
+function AboutMe({ onDigDeeper }) {
   const [msgs, setMsgs] = useState([{ type: "bot", key: "start" }]);
   const [gifs, setGifs] = useState({}); // key -> gif url
   const bottomRef = useRef(null);
@@ -650,6 +654,14 @@ function AboutMe() {
                       {opt.label}
                     </button>
                   ))}
+                  {node.deepDive && onDigDeeper && (
+                    <button onClick={() => onDigDeeper(node.deepDive)}
+                      style={{ background: "rgba(255,77,141,0.07)", border: "1px solid rgba(255,77,141,0.35)", borderRadius: 20, padding: "6px 14px", fontSize: 12, color: "#FF4D8D", cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s", whiteSpace: "nowrap" }}
+                      onMouseEnter={e => { e.target.style.background = "rgba(255,77,141,0.15)"; }}
+                      onMouseLeave={e => { e.target.style.background = "rgba(255,77,141,0.07)"; }}>
+                      🔍 Want to know more about this?
+                    </button>
+                  )}
                 </div>
               )}
             </BotBubble>
@@ -779,6 +791,12 @@ function AskMeAnything() {
     }
   }, [msgs, loading]);
 
+  // allow About Me tab to trigger a prefilled question
+  useEffect(() => {
+    window.__autoAsk = (text) => send(text);
+    return () => { delete window.__autoAsk; };
+  }, [loading, history]);
+
   async function saveQuestion(text) {
     try {
       const existing = await window.storage.get("questions");
@@ -889,7 +907,7 @@ const TABS = [
 ];
 
 export default function App() {
-  const [tab, setTab] = useState("ask");
+  const [tab, setTab] = useState("about");
 
   return (
     <>
@@ -919,7 +937,7 @@ export default function App() {
         </div>
 
         {/* Toggle — two tabs only */}
-        <div style={{ background: "#111", borderBottom: "1px solid #252525", padding: "10px 16px", display: "flex", gap: 0, flexShrink: 0 }}>
+        <div style={{ background: "#111", borderBottom: "1px solid #252525", padding: "10px 16px 0 16px", display: "flex", flexDirection: "column", gap: 0, flexShrink: 0 }}>
           <div style={{ display: "flex", background: "#1A1A1A", border: "1px solid #252525", borderRadius: 12, padding: 3, width: "100%", gap: 3 }}>
             {TABS.map(t => (
               <button key={t.id} onClick={() => setTab(t.id)} style={{
@@ -933,10 +951,15 @@ export default function App() {
               }}>{t.label}</button>
             ))}
           </div>
+          {tab === "about" && (
+            <div style={{ textAlign: "center", padding: "7px 0 8px", fontSize: 11.5, color: "#444", letterSpacing: "0.02em" }}>
+              Want to go deeper? Switch to <span onClick={() => setTab("ask")} style={{ color: "#FF4D8D", cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 2 }}>◈ How I Think</span> to ask me anything.
+            </div>
+          )}
         </div>
 
         {/* Content */}
-        {tab === "about" && <AboutMe />}
+        {tab === "about" && <AboutMe onDigDeeper={(msg) => { setTab("ask"); setTimeout(() => window.__autoAsk?.(msg), 120); }} />}
         {tab === "ask"   && <AskMeAnything />}
 
       </div>
