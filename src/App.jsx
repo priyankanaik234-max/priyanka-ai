@@ -921,41 +921,60 @@ export default function App() {
         button { font-family: inherit; }
         button:focus { outline: none; }
         input:focus { outline: none; }
+        @media (max-width: 380px) {
+          .tagline { display: none; }
+          .toggle-track { width: 140px !important; }
+        }
       `}</style>
 
       <div style={{ display: "flex", flexDirection: "column", height: "100vh", maxWidth: 680, margin: "0 auto", background: "#0A0A0A", fontFamily: "'DM Sans', system-ui, sans-serif", color: "#F0EDE8" }}>
 
-        {/* Header */}
-        <div style={{ background: "#111", borderBottom: "1px solid #252525", padding: "14px 20px", display: "flex", alignItems: "center", gap: 12, flexShrink: 0, position: "relative" }}>
+        {/* Header — with toggle built in */}
+        <div style={{ background: "#111", borderBottom: "1px solid #1A1A1A", padding: "12px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0, position: "relative" }}>
           <div style={{ position: "absolute", top: 0, left: "10%", right: "10%", height: 1, background: "linear-gradient(90deg, transparent, #FF4D8D, transparent)" }} />
-          <img src={AVATAR_SRC} alt="Priyanka" style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", objectPosition: "center top", flexShrink: 0, boxShadow: "0 0 20px rgba(255,77,141,0.35)", border: "2px solid #FF4D8D" }} />
-          <div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: "#F0EDE8", fontFamily: "Georgia, serif", letterSpacing: "0.02em" }}>Priyanka Naik</div>
-            <div style={{ fontSize: 11, color: "#CC1A5E", marginTop: 2, letterSpacing: "0.06em", fontStyle: "italic" }}>I fix things. Mostly ones nobody noticed were broken.</div>
-          </div>
-          <div style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#4CAF7D", boxShadow: "0 0 8px rgba(76,175,125,0.6)" }} />
-        </div>
 
-        {/* Toggle — two tabs only */}
-        <div style={{ background: "#111", borderBottom: "1px solid #252525", padding: "10px 16px 0 16px", display: "flex", flexDirection: "column", gap: 0, flexShrink: 0 }}>
-          <div style={{ display: "flex", background: "#1A1A1A", border: "1px solid #252525", borderRadius: 12, padding: 3, width: "100%", gap: 3 }}>
-            {TABS.map(t => (
-              <button key={t.id} onClick={() => setTab(t.id)} style={{
-                flex: 1, padding: "9px 8px", fontSize: 13, fontWeight: tab === t.id ? 600 : 400,
-                textAlign: "center", borderRadius: 9, cursor: "pointer",
-                border: "none",
-                background: tab === t.id ? "linear-gradient(135deg, rgba(255,77,141,0.15), rgba(204,26,94,0.15))" : "transparent",
-                color: tab === t.id ? "#FF4D8D" : "#6B6B6B",
-                transition: "all 0.2s", letterSpacing: "0.02em",
-                boxShadow: tab === t.id ? "inset 0 0 0 1px rgba(255,77,141,0.3)" : "none",
-              }}>{t.label}</button>
-            ))}
+          {/* Avatar */}
+          <img src={AVATAR_SRC} alt="Priyanka" style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", objectPosition: "center top", flexShrink: 0, boxShadow: "0 0 16px rgba(255,77,141,0.3)", border: "2px solid #FF4D8D" }} />
+
+          {/* Name + tagline */}
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: "#F0EDE8", fontFamily: "Georgia, serif", letterSpacing: "0.02em", whiteSpace: "nowrap" }}>Priyanka Naik</div>
+            <div style={{ fontSize: 10, color: "#CC1A5E", marginTop: 1, fontStyle: "italic", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>I fix things. Mostly ones nobody noticed were broken.</div>
           </div>
-          {tab === "about" && (
-            <div style={{ textAlign: "center", padding: "7px 0 8px", fontSize: 11.5, color: "#444", letterSpacing: "0.02em" }}>
-              Want to go deeper? Switch to <span onClick={() => setTab("ask")} style={{ color: "#FF4D8D", cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 2 }}>◈ How I Think</span> to ask me anything.
+
+          {/* Toggle — right side */}
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+            <div
+              onClick={() => setTab(tab === "about" ? "ask" : "about")}
+              style={{ position: "relative", width: 168, height: 34, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 17, cursor: "pointer", flexShrink: 0 }}
+            >
+              {/* sliding pill */}
+              <div style={{
+                position: "absolute", top: 3, bottom: 3,
+                left: tab === "about" ? 3 : "calc(50% + 1px)",
+                width: "calc(50% - 4px)",
+                background: "linear-gradient(135deg, rgba(255,77,141,0.22), rgba(204,26,94,0.12))",
+                border: "1px solid rgba(255,77,141,0.38)",
+                borderRadius: 14,
+                boxShadow: "0 0 14px rgba(255,77,141,0.16), inset 0 1px 0 rgba(255,255,255,0.07)",
+                transition: "left 0.26s cubic-bezier(0.4,0,0.2,1)",
+                pointerEvents: "none",
+              }} />
+              {/* labels */}
+              <div style={{ position: "absolute", inset: 0, display: "flex", pointerEvents: "none" }}>
+                {TABS.map(t => (
+                  <div key={t.id} style={{
+                    flex: 1, display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 11, fontWeight: tab === t.id ? 600 : 400,
+                    color: tab === t.id ? "#FF4D8D" : "rgba(255,255,255,0.22)",
+                    letterSpacing: "0.04em", transition: "all 0.22s",
+                  }}>{t.label}</div>
+                ))}
+              </div>
             </div>
-          )}
+            {/* online dot */}
+            <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#4CAF7D", boxShadow: "0 0 7px rgba(76,175,125,0.6)", flexShrink: 0 }} />
+          </div>
         </div>
 
         {/* Content */}
