@@ -484,9 +484,27 @@ function Avatar({ size = 30 }) {
   );
 }
 
+function renderText(text) {
+  // convert *text* to italic pink spans, split on newlines for pre-wrap behaviour
+  if (!text) return null;
+  return text.split("\n").map((line, li) => {
+    const parts = line.split(/(\*[^*]+\*)/g);
+    return (
+      <span key={li}>
+        {parts.map((part, pi) =>
+          part.startsWith("*") && part.endsWith("*")
+            ? <em key={pi} style={{ color: "#FF4D8D", fontStyle: "italic" }}>{part.slice(1, -1)}</em>
+            : <span key={pi}>{part}</span>
+        )}
+        {li < text.split("\n").length - 1 && <br />}
+      </span>
+    );
+  });
+}
+
 function BotBubble({ text, featured, children }) {
   return (
-    <div style={{ display: "flex", alignItems: "flex-end", gap: 8 }}>
+    <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
       <Avatar />
       <div style={{ maxWidth: "78%" }}>
         <div style={{
@@ -495,8 +513,8 @@ function BotBubble({ text, featured, children }) {
           borderLeft: featured ? "2px solid #FF4D8D" : "1px solid #252525",
           borderRadius: "16px 16px 16px 4px",
           padding: "12px 16px", fontSize: 13.5, lineHeight: 1.75,
-          color: "#D8D4CE", whiteSpace: "pre-wrap",
-        }}>{text}</div>
+          color: "#D8D4CE",
+        }}>{renderText(text)}</div>
         {children}
       </div>
     </div>
