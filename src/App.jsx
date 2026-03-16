@@ -327,6 +327,23 @@ I've been wrong in rooms before. You acknowledge it, you move on, you file the l
 
 ---
 
+---
+
+AI PROJECTS I'VE BUILT:
+
+1. Priyanka.ai — AI Portfolio Chatbot
+Built an AI-powered conversational portfolio on Claude API, React, and Vercel. Designed the full system prompt architecture — persona layer, anti-hallucination guardrails, storytelling beat structure, role-adaptive context shifting. The product itself is the demo. Live at priyanka-ai-puce.vercel.app.
+
+2. LinkedIn Job Scraper — Email Alert System
+Built a LinkedIn job scraper that runs on a schedule — scans for PM and APM roles matching my keywords and sends me email alerts automatically. Built with Claude, GitHub, and Railway. No more manually checking job boards every day.
+NOTE: If asked for specific details beyond this — say warmly: "I haven't added enough detail about this one yet — reach me directly at priyankanaik234@gmail.com and I'd love to walk you through it."
+
+3. PRD to Project Tracker — Currently in Progress
+Building a tool that takes a PRD and breaks it down into tasks with timelines, dependencies, and bottleneck flags. Exportable. Has an AI conversation layer where you can ask questions about the project — "what's blocking launch?", "what's the critical path?" — and it answers from the PRD context. Built with Next.js, Claude API, GitHub, and Vercel. Still in progress.
+NOTE: If asked for specific details beyond this — say warmly: "This one's still in the oven — I'd love to show you when it's ready. Reach me at priyankanaik234@gmail.com"
+
+---
+
 CONTACT: priyankanaik234@gmail.com | +91 7030677794 | linkedin.com/in/priyankanaik25 | Bengaluru, India`;
 
 // ─── ABOUT ME FLOW ────────────────────────────────────────────────────────────
@@ -367,13 +384,50 @@ const FLOW = {
     ],
   },
   built: {
-    message: "Four systems. Each one started with a problem nobody had fully named yet.\n\nWhich one?",
+    message: "Work systems at River — and AI projects I've built on the side.\n\nWhich one?",
     options: [
       { label: "🔄 Lead Reattempt Module", next: "lead" },
       { label: "⚙️ Lead Qualification System", next: "qual" },
       { label: "📱 CREW App", next: "crew" },
       { label: "📊 Attribution Framework", next: "attr" },
+      { label: "🤖 AI Projects", next: "ai_projects" },
       { label: "← Back", next: "start" },
+    ],
+  },
+  ai_projects: {
+    message: "Three AI projects — each one solving a problem I had personally.\n\nWhich one?",
+    options: [
+      { label: "💬 Priyanka.ai", next: "ai_portfolio" },
+      { label: "🔍 LinkedIn Job Scraper", next: "ai_scraper" },
+      { label: "📋 PRD to Project Tracker", next: "ai_prd" },
+      { label: "← Back", next: "built" },
+    ],
+  },
+  ai_portfolio: {
+    message: "You're talking to it.\n\nBuilt on Claude API, React, and Vercel. The full system prompt architecture — persona layer, anti-hallucination guardrails, storytelling beat structure, role-adaptive context shifting.\n\nThe brief was: what if my resume could think? Live at priyanka-ai-puce.vercel.app.",
+    deepDive: "Tell me more about how you built Priyanka.ai — the technical decisions, the prompt engineering, what was hardest?",
+    options: [
+      { label: "🔍 Job Scraper", next: "ai_scraper" },
+      { label: "📋 PRD Tracker", next: "ai_prd" },
+      { label: "← Back", next: "ai_projects" },
+    ],
+  },
+  ai_scraper: {
+    message: "Built a LinkedIn job scraper that runs on a schedule — scans for PM and APM roles matching my keywords and sends me email alerts automatically.\n\nBuilt with Claude, GitHub, and Railway. No more manually checking job boards every day.",
+    deepDive: "Tell me more about the LinkedIn job scraper — how does it work technically?",
+    options: [
+      { label: "💬 Priyanka.ai", next: "ai_portfolio" },
+      { label: "📋 PRD Tracker", next: "ai_prd" },
+      { label: "← Back", next: "ai_projects" },
+    ],
+  },
+  ai_prd: {
+    message: "Still building this one.\n\nThe idea: paste in a PRD, and it breaks down into tasks automatically — timelines, dependencies, bottleneck flags. Exportable. And you can talk to the AI inside it — 'what's blocking launch?', 'what's the critical path?' — and it answers from the PRD context.\n\nBuilt with Next.js, Claude API, GitHub, and Vercel. Watch this space.",
+    deepDive: "Tell me more about the PRD to project tracker — what's the current state and what are you building next?",
+    options: [
+      { label: "💬 Priyanka.ai", next: "ai_portfolio" },
+      { label: "🔍 Job Scraper", next: "ai_scraper" },
+      { label: "← Back", next: "ai_projects" },
     ],
   },
   lead: {
