@@ -315,7 +315,7 @@ The frustration is real sometimes. But the outcome of the project matters more t
 
 Q: Why should we hire you over other APM candidates?
 A: Most APM candidates have read the books. I built the systems.
-I didn't come through a PM programme — I came through five years of finding broken things inside a startup and fixing them before anyone asked me to. That's a different kind of training.
+I didn't come through a PM programme — I came through three years of finding broken things inside a startup and fixing them before anyone asked me to. That's a different kind of training.
 The AI angle isn't positioning either. I've been building with LLMs, designing agentic workflows, shipping prompt-engineered products. This portfolio bot you're talking to right now — that's the demo.
 *There's one thing I think makes me genuinely different from most candidates at my level. Want to hear it?*
 
@@ -342,7 +342,7 @@ const FLOW = {
     ],
   },
   who: {
-    message: "I'm a product manager who started in marketing because I had a plan.\n\nThe plan wasn't wrong — I loved marketing, actually. The strategy, the funnel thinking, the 'why does this work on people' part. But somewhere along the way I realised I was always more excited by what was behind the campaign than the campaign itself.\n\nFive years at River Mobility, an EV startup in Bengaluru. My job title says growth. My actual job is: find the thing quietly breaking, then fix it before anyone notices it was broken.",
+    message: "I'm a product manager who started in marketing because I had a plan.\n\nThe plan wasn't wrong — I loved marketing, actually. The strategy, the funnel thinking, the 'why does this work on people' part. But somewhere along the way I realised I was always more excited by what was behind the campaign than the campaign itself.\n\nThree years at River Mobility, an EV startup in Bengaluru. My job title says growth. My actual job is: find the thing quietly breaking, then fix it before anyone notices it was broken.",
     gif: "this is fine dog working",
     options: [
       { label: "📍 How I got here", next: "origin" },
