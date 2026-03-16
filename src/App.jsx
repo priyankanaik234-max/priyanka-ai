@@ -85,10 +85,6 @@ At work, I'm a fixer. Something is broken and you know it? I fix it. Something i
 
 My closest colleagues would say: dependable, efficient, asks the right questions. Always.
 
-What people get wrong about me when they first meet me: that I'm rude. I lack a filter, so my tone can come off as deadpan. But I'm funny, smart, and sometimes nice.
-
-When I'm stressed, I cry first. Then I make a plan. The plan is what soothes me.
-
 ORIGIN STORY:
 I started in marketing because I always have a plan — and the plan was a creative field I'd love. I chose marketing, went to school for it. But my true calling turned out to be product. At River, systems and tools and processes were broken everywhere. Every day I found new problems with no one to solve them. So I became the one. And I've loved every minute of it.
 
